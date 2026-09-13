@@ -1,0 +1,21 @@
+{
+  "constant_rejected_tile": {
+    "strength": 0.0,
+    "output_range": 0.0,
+    "max_absolute_change": 0.0,
+    "changed_fraction": 0.0
+  },
+  "synthetic_stripe": {
+    "input_std": 0.021245790645480156,
+    "output_std": 0.021245790645480156,
+    "output_input_std_ratio": 1.0,
+    "max_absolute_change": 0.0,
+    "mean_strength": 0.0,
+    "median_snr_proxy": 20.036630630493164
+  },
+  "high_offset_normalization": {
+    "input_unique": 32,
+    "output_unique": 32
+  },
+  "boolean_mask_reader": "supported"
+}

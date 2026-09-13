@@ -1,0 +1,31 @@
+{
+  "status": "Research pointers only; no code vendored or revision pins selected.",
+  "sources": [
+    {
+      "id": "hifiem",
+      "url": "https://github.com/image-infomatics/hifiem",
+      "commit": null,
+      "license_status": "Verify chosen revision before use"
+    },
+    {
+      "id": "visual_prior_he",
+      "doi": "10.1016/j.image.2024.117246",
+      "implementation": "pending"
+    },
+    {
+      "id": "multiscale_redistribution",
+      "doi": "10.3390/math13203282",
+      "implementation": "pending"
+    },
+    {
+      "id": "simple_tone_curves",
+      "doi": "10.1007/s00371-026-04505-y",
+      "implementation": "pending"
+    },
+    {
+      "id": "ia_clahe",
+      "url": "https://arxiv.org/abs/2604.16010",
+      "implementation": "Existing backend is independent, not a reproduction"
+    }
+  ]
+}

@@ -1,0 +1,10 @@
+WARNING: The directory '/home/oai/.cache/pip' or its parent directory is not owned or is not writable by the current user. The cache has been disabled. Check the permissions and owner of that directory. If executing pip with sudo, you should use sudo's -H flag.
+Processing /mnt/data/tissue-snr-ia-clahe-v0.2.0
+  Preparing metadata (pyproject.toml): started
+  Preparing metadata (pyproject.toml): finished with status 'done'
+Building wheels for collected packages: tissue-snr-ia-clahe
+  Building wheel for tissue-snr-ia-clahe (pyproject.toml): started
+  Building wheel for tissue-snr-ia-clahe (pyproject.toml): finished with status 'done'
+  Created wheel for tissue-snr-ia-clahe: filename=tissue_snr_ia_clahe-0.2.0-py3-none-any.whl size=36003 sha256=a03ef6412e2dda5feb4270b27b0b4de0efeb440abac5ddabbe2209954667b1f4
+  Stored in directory: /tmp/pip-ephem-wheel-cache-8eehwf5o/wheels/01/76/63/471a5cf98eb39c3d2e5f347233ce6de714ec53eff601dd77bf
+Successfully built tissue-snr-ia-clahe

@@ -1,0 +1,18 @@
+[
+  {
+    "input": "val_000_input.tif",
+    "group_id": "synthetic_1000",
+    "tissue_mae": 0.012365826405584812,
+    "input_mae": 0.02371956966817379,
+    "active_tiles": 16,
+    "total_tiles": 16
+  },
+  {
+    "input": "val_001_input.tif",
+    "group_id": "synthetic_1001",
+    "tissue_mae": 0.01275161188095808,
+    "input_mae": 0.024424199014902115,
+    "active_tiles": 16,
+    "total_tiles": 16
+  }
+]
