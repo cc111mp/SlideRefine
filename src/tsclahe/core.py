@@ -301,7 +301,7 @@ class EnhancementResult:
             "warnings": self.warnings,
             "provenance": self.provenance,
             "active_tiles": int((self.transform.strengths > 0).sum()),
-            "directional_uncertainty_tiles": int((st.directional_coherence >= self.config.artifact_low).sum()) if st else None,
+            "directional_uncertainty_tiles": int((st.directional_coherence >= self.transform.config.artifact_low).sum()) if st else None,
             "sensor_saturation_measured": bool(st.sensor_saturation_known.any()) if st else False,
             "interpretation": "Enhanced intensities are not quantitative fluorescence measurements.",
         }
