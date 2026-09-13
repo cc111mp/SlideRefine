@@ -1,0 +1,32 @@
+{
+  "tile_size": [
+    32,
+    32
+  ],
+  "bins": 64,
+  "clip_min": 1.0,
+  "clip_max": 4.0,
+  "max_strength": 0.65,
+  "max_delta": 0.25,
+  "contrast_target": 0.35,
+  "snr_low": 1.0,
+  "snr_high": 4.0,
+  "noise_floor": 0.0001,
+  "min_tissue_fraction": 0.02,
+  "full_tissue_fraction": 0.3,
+  "min_tissue_pixels": 16,
+  "min_noise_coefficients": 4,
+  "lower_percentile": 0.5,
+  "upper_percentile": 99.5,
+  "mask_sigma": 2.0,
+  "mask_noise_multiplier": 4.0,
+  "mask_min_component": 64,
+  "apply_block_rows": 256,
+  "max_gain": 2.0,
+  "reliability_feather": 8,
+  "artifact_policy": "conservative",
+  "artifact_low": 0.8,
+  "artifact_high": 0.95,
+  "sensor_max": null,
+  "max_sensor_saturated_fraction": 0.05
+}

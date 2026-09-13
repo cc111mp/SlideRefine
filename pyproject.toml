@@ -1,0 +1,28 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "sliderefine"
+version = "0.1.0"
+description = "Coordinate-aware, tile-based microscopy enhancement research workspace"
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = ["numpy>=1.24", "scipy>=1.10", "tifffile>=2023.7.10", "Pillow>=10"]
+
+[project.optional-dependencies]
+learn = ["torch>=2.6"]
+test = ["pytest>=7", "pytest-cov>=4"]
+codecs = ["imagecodecs>=2023.7.10"]
+
+[project.scripts]
+sliderefine = "sliderefine.cli:main"
+tsclahe = "tsclahe.cli:main"
+tsclahe-train = "tsclahe.train:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-ra"

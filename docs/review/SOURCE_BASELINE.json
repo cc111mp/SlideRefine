@@ -1,0 +1,31 @@
+{
+  "archive": "tissue-snr-ia-clahe-v0.1.0.zip",
+  "archive_sha256": "fe55fe831305e13e2d2b178fdc90563ab62ca6cc8993ab9e91d76097606f59cc",
+  "source_package": "tsclahe",
+  "baseline_tests": "61 passed",
+  "prior_audit_package": "tissue_snr_clahe",
+  "prior_audit_is_same_source": false,
+  "source_files": {
+    "examples/demo.py": "7a73b84a9e3fe84ad3feffcb9dc30f6777d4c71d32c40203e34d5fa9c7eccf56",
+    "examples/streaming_npy.py": "ca6bc6563066c23e23003c3b52119cb29f0f8fab82a471b12a8c92c166436728",
+    "examples/synthetic_training.py": "8631a7f8a065d0f88a555318b0f75c219fddd34973c3690fb49f4a04949f8768",
+    "pyproject.toml": "f0b5c37cd324afdf28f710e82716b64949e8c328a6b55b1ab46b03726095bf06",
+    "src/tsclahe/__init__.py": "3ab9a47f3c527e36d63914f91a2204800d42d634594b8e66838089f3df2206a4",
+    "src/tsclahe/__main__.py": "79ee6f134c5c5193377cf9b189cbdcc3e2095e49ba9cec310114441c15a917c4",
+    "src/tsclahe/cli.py": "443a971382297a045922badb0ead2d34a2e1f514228af79680e440af8f17ac74",
+    "src/tsclahe/config.py": "8029fb87a92c1b59d580299e6bcd76d1c71fcefbae2e8722887dbb3414c4f0cc",
+    "src/tsclahe/core.py": "f3339614639088f3a38927919dfc7b20674ffb3809c8748d8f6cf286b037d440",
+    "src/tsclahe/io.py": "89720bafc8c2f449f5ab5f45b9a077df8afde8aa79138f9265ebe567a3973df6",
+    "src/tsclahe/preprocess.py": "5c6c786c46f0612c14c3e210a7d00f6920df54a90d5cda12dc18801158541f23",
+    "src/tsclahe/statistics.py": "6441dbaff511c1cedcf31d8046d2105d6d1fe48cfdbe0f1af5189618dcfbe237",
+    "src/tsclahe/streaming.py": "43002ef5150f6a2b2b21d04246115f324246716c0f4246ce5bd1ea7a748079d8",
+    "src/tsclahe/torch_backend.py": "6fbbe4274b0f5f738ad917412889c2f3465c52a657d238aafd73839f5fac442c",
+    "src/tsclahe/train.py": "f36abbb5573878a2d764a349da3f488f11e829001db20b1483520e6b4495b739",
+    "tests/conftest.py": "5163ff6d455501a05fe4a68f6febcc289401bf517fdecd3c4c6101d918f5a38d",
+    "tests/test_core.py": "a913358e4466d259dedaddb5ae7a8b5924208831fde58c80960d26717e9a2e8f",
+    "tests/test_io_cli.py": "5c92d8a0de3969962d757ee9b91f34f25e73dabab0cf4c72a14bf28ab7f07023",
+    "tests/test_streaming.py": "4300c94bd9ace42e98977ff29deb2e69e01f5eee21c5351bf0500f1007f3625f",
+    "tests/test_torch.py": "5c1a5551344783eac6d56595b1ff2b7ec5e21131d90cafc35c68a008f40cbcf1",
+    "tests/test_train.py": "311eb87109df8536ee8246f4ffd4a196e242447eeed23824d4d6af108922423c"
+  }
+}

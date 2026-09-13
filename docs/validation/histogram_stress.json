@@ -1,0 +1,62 @@
+{
+  "synthetic_only": true,
+  "total_histograms": 224,
+  "results": [
+    {
+      "bins": 32,
+      "histograms": 32,
+      "maximum_mass_error": 0.0,
+      "maximum_cap_excess": 3.969049770097266e-08,
+      "minimum_bin_mass": 0.0,
+      "maximum_fixed_context_gain": 2.000000038283133
+    },
+    {
+      "bins": 64,
+      "histograms": 32,
+      "maximum_mass_error": 0.0,
+      "maximum_cap_excess": 5.286920903846415e-08,
+      "minimum_bin_mass": 0.0007967352867126465,
+      "maximum_fixed_context_gain": 2.0000000440163603
+    },
+    {
+      "bins": 128,
+      "histograms": 32,
+      "maximum_mass_error": 0.0,
+      "maximum_cap_excess": 5.750988939234869e-08,
+      "minimum_bin_mass": 0.0005505681037902832,
+      "maximum_fixed_context_gain": 2.000000048922857
+    },
+    {
+      "bins": 256,
+      "histograms": 32,
+      "maximum_mass_error": 0.0,
+      "maximum_cap_excess": 5.503178521042151e-08,
+      "minimum_bin_mass": 0.0003375411033630371,
+      "maximum_fixed_context_gain": 2.0000000531335616
+    },
+    {
+      "bins": 512,
+      "histograms": 32,
+      "maximum_mass_error": 0.0,
+      "maximum_cap_excess": 5.584134271825747e-08,
+      "minimum_bin_mass": 0.00017571449279785156,
+      "maximum_fixed_context_gain": 2.0000000488903424
+    },
+    {
+      "bins": 1024,
+      "histograms": 32,
+      "maximum_mass_error": 0.0,
+      "maximum_cap_excess": 5.9503425441261026e-08,
+      "minimum_bin_mass": 0.000118255615234375,
+      "maximum_fixed_context_gain": 2.0000000424479367
+    },
+    {
+      "bins": 4096,
+      "histograms": 32,
+      "maximum_mass_error": 0.0,
+      "maximum_cap_excess": 5.7186491662529135e-08,
+      "minimum_bin_mass": 3.528594970703125e-05,
+      "maximum_fixed_context_gain": 2.0000000527506927
+    }
+  ]
+}

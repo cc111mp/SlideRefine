@@ -1,0 +1,20 @@
+{
+  "review_date": "2026-09-13",
+  "python": "3.13.5 (main, Jul 15 2026, 20:25:40) [GCC 14.2.0]",
+  "platform": "Linux-6.18.44-x86_64-with-glibc2.41",
+  "machine": "x86_64",
+  "accelerator_tested": "CPU only",
+  "dependencies": {
+    "numpy": "2.3.5",
+    "scipy": "1.17.0",
+    "torch": "2.10.0+cpu",
+    "tifffile": "2026.5.15",
+    "Pillow": "12.3.0",
+    "pytest": "9.0.2",
+    "pytest-cov": "7.0.0",
+    "setuptools": "82.0.1",
+    "pip": "25.1.1",
+    "wheel": "No standalone distribution metadata (wheel build used pip/setuptools)"
+  },
+  "default_controller_parameters": 17986
+}
