@@ -1,1 +1,3 @@
-"""simple_tone_curves: planned. See docs/METHOD_STATUS.md; no fallback algorithm."""
+"""Independent paper-equation implementation; explicit target curve required."""
+from .reference import SimpleToneCurve, fit_simple_tone_curve
+__all__ = ["SimpleToneCurve", "fit_simple_tone_curve"]

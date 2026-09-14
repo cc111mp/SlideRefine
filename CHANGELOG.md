@@ -1,5 +1,15 @@
 # Changelog
 
+## 0.2.0 — reference contrast methods (2026-09-14)
+
+- Add source-pinned, Apache-2.0 HiFiEM **contrast-only** excerpt and explicit AF adapter.
+- Add independent Simple Tone Curves discrete constrained-QP search with supplied target,
+  versioned curve state, PCHIP/linear application and numerical failure reporting.
+- Integrate both with shared slide normalization, coordinate-aware output and HiFiEM halos.
+- Preserve the tsclahe backend byte-for-byte; retain unavailable errors for unverified methods.
+- Add reference/provenance notes, boundary regressions and tests; no real-AF/gigapixel claims.
+
+
 ## SlideRefine 0.1.0 bootstrap
 - Import the reviewed tsclahe 0.2.0 source, tests, configs, examples, and textual review records without algorithm changes.
 - Add the SlideRefine namespace/CLI and explicit implemented/planned method registry.

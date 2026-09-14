@@ -1,0 +1,12 @@
+{
+  "variant": "contrast_af",
+  "smoothing": 31,
+  "minmax_size": 9,
+  "ratio": 1.0,
+  "sigma": 0.03,
+  "offset": -0.06,
+  "hp_sigma": 0.2,
+  "mean": 0.5,
+  "clip": 1.0,
+  "redistribute": "leftmost"
+}

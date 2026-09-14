@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "sliderefine"
-version = "0.1.0"
+version = "0.2.0"
 description = "Coordinate-aware, tile-based microscopy enhancement research workspace"
 readme = "README.md"
 requires-python = ">=3.10"
@@ -26,3 +26,6 @@ where = ["src"]
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 addopts = "-ra"
+
+[tool.setuptools.package-data]
+"sliderefine.methods.hifiem._vendor" = ["LICENSE", "NOTICE"]

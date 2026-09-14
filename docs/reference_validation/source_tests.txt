@@ -1,0 +1,11 @@
+........................................................................ [ 33%]
+........................................................................ [ 67%]
+....................................................................     [100%]
+=============================== warnings summary ===============================
+tests/test_torch.py::test_learned_backend_parity_and_gradients
+tests/test_torch.py::test_checkpoint_roundtrip
+  /mnt/data/sliderefine_work/SlideRefine/src/tsclahe/torch_backend.py:177: RuntimeWarning: Unbound research checkpoint: normalization policy was not saved.
+    warnings.warn("Unbound research checkpoint: normalization policy was not saved.", RuntimeWarning)
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+212 passed, 2 warnings in 5.52s
