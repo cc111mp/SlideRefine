@@ -28,3 +28,21 @@ The current writer stores NPY output tiles and branch manifests, not a native WS
 
 ## Acceptance before production use
 Native format/channel/metadata roundtrips; actual gigapixel peak RAM and throughput; chunk-size/origin/order parity; rejected regions and noise/artifact fixtures; missing/edge coverage; restart integrity; no duplicated normalization; real AF and downstream slide/patient/session-held-out evaluation.
+
+## Reference-method adapters added in 0.2.0
+
+Simple Tone Curves uses one explicitly fitted curve for the run, with no local fitting
+or pixel halo at application time. Its first/last output knots preserve the supplied
+target endpoints. HiFiEM requires `variant="contrast_af"`; only local/global contrast
+is included. Its fixed, normalized-unit configuration is serialized for the whole run.
+
+For the supported HiFiEM path, halo=max(smoothing-1,minmax_size//2), or zero at ratio=0.
+Clip the read rectangle at actual slide edges and apply mirror conditions there. Do not
+reflect or treat gaps between source tiles as measured pixels. If the full dependency
+window includes missing coverage, preserve the owned pixel's normalized baseline.
+
+Both adapters keep supplied non-tissue pixels unchanged and publish validity masks.
+Neither performs dark/flat calibration or physical saturation detection. Fitted state
+identity and normalization policy are separate recorded fields. Source tiles must remain
+immutable across all passes. These are selected-channel reference runners with incremental
+NPY outputs, not native pyramidal formats or a production scheduler.

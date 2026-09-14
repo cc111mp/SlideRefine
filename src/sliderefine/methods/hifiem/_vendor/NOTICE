@@ -1,0 +1,14 @@
+Selected code from image-infomatics/hifiem (Apache License 2.0).
+Upstream: https://github.com/image-infomatics/hifiem
+Pinned commit: 477efb57dc2b2d24e1ad56d1044cf99d22d39957
+Source: python/fltemd.py, function adjust_histogram_v_3_02
+Source Git blob: 885114c73e2c04224750340508856c5f2b07dfef
+Associated work: Yuri Kreinin, Pat Gunn, Dmitri Chklovskii, Jingpeng Wu,
+High-fidelity Image Restoration of Large 3D Electron Microscopy Volume.
+
+SlideRefine modifications, 2026-09-14: extracted the contrast function,
+shortened its docstring, and supplied a minimal separable-kernel compatibility
+class instead of importing the large upstream module and OpenCV. The computational
+body below is preserved; the supported reference scope is 2-D contrast, not
+stripe removal, background fitting, denoising, or the upstream cluster workflow.
+The independent AF wrapper is in ../contrast.py and records its differences.

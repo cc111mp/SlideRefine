@@ -19,11 +19,19 @@ Work on one milestone per branch/PR. Read AGENTS.md first. Preserve the original
 ## Later PR: scheduler and resumable outputs
 Use immutable fitted state and bounded worker/cache budgets. Write a run fingerprint, completed-chunk ledger and atomic completion marker. A resumed run must reject changed inputs/config/state. Reject duplicate writes; avoid silently updating mappings while workers render. Measure real input I/O, peak RSS and output throughput.
 
-## Paper-method PRs
-- Simple Tone Curves: verify fitting equations, monotonicity and inflection constraints, and declare target-curve source. Add an independently checked curve fixture.
+## Reference methods integrated in 0.2.0
+
+- HiFiEM: contrast reference excerpt and `contrast_af` runner now exist. Full destriping,
+  denoising and background modeling remain unimplemented. See docs/references/hifiem.md.
+- Simple Tone Curves: discrete target-fitting reference and tile application now exist.
+  Target selection and real-AF validation remain independent research tasks.
+- Read docs/REFERENCE_METHODS_VALIDATION.md before citing test results.
+
+## Further paper-method PRs
+- Simple Tone Curves: evaluate a deployment-available AF target policy; do not replace the verified discrete solver with a generic sigmoid. Preserve the small-QP oracle and boundary tests.
 - Visual-prior HE: retrieve full equations/code, document optimizer and convergence, identify global versus spatial sufficient statistics.
 - Multiscale redistribution: preserve scale-specific redistribution/fusion; define global lattices at all scales and native-versus-downsampled semantics.
-- HiFiEM: pin verified upstream revision/licenses; reference adapter first, then separate AF stage configurations. Do not assume all EM stages are local or fluorescence-compatible.
+- HiFiEM: preserve the pinned contrast reference and its notices. Add additional upstream stages only after their separate dependencies and full/chunk behavior are verified; the current halo must not be reused for destriping.
 
 ## Final empirical milestone
 Actual gigapixel dataset on target hardware, with native I/O, restart checks and full/chunk tests on reference ROIs. Evaluate weak tissue, oriented structures, stripes/grids, low-SNR, saturation, and mask failures. Compare normalization-only and independent methods before combinations. Distinguish frozen-model preprocessing swaps from matched retraining; split by slide/patient/session.

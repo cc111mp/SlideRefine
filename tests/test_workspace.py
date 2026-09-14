@@ -96,7 +96,7 @@ def test_histogram_percentiles_exact(source_path,chunk):
     norm=fit_uint_window(s,chunk_shape=chunk)
     np.testing.assert_allclose([norm.low,norm.high],expected,rtol=0,atol=1e-10)
 
-@pytest.mark.parametrize('name',['hifiem','visual_prior_he','multiscale_redistribution','simple_tone_curves'])
+@pytest.mark.parametrize('name',['visual_prior_he','multiscale_redistribution'])
 def test_pending_methods_fail_before_writes(tmp_path,name):
     assert len(available_methods())==6
     with pytest.raises(MethodUnavailableError):
@@ -154,5 +154,5 @@ def test_cli(tmp_path,capsys):
                  '--method','normalization_only','--limits','0','16000'])==0
     with pytest.raises(SystemExit) as e:
         main(['run',str(tmp_path/'demo/manifest.json'),str(tmp_path/'bad'),
-              '--method','hifiem','--limits','0','16000'])
+              '--method','multiscale_redistribution','--limits','0','16000'])
     assert e.value.code==2

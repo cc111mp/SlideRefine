@@ -41,8 +41,17 @@ def estimate_state_bytes(shape, cfg):
 
 def run_manifest(manifest, output, *, method="tissue_snr_clahe", config=None,
                  limits=None, percentiles=None, chunk_shape=(1024,1024),
-                 max_state_bytes=512*1024**2):
+                 max_state_bytes=512*1024**2, method_config=None, tone_curve=None):
     require_method(method)  # Fail before creating files for planned methods.
+    if method in ("hifiem", "simple_tone_curves"):
+        if config is not None:
+            raise ValueError("CLAHE config cannot be used for this method; use method_config/tone_curve")
+        from .reference_methods import run_reference_manifest
+        return run_reference_manifest(manifest,output,method=method,method_config=method_config,
+                                      tone_curve=tone_curve,limits=limits,percentiles=percentiles,
+                                      chunk_shape=chunk_shape,max_state_bytes=max_state_bytes)
+    if method_config is not None or tone_curve is not None:
+        raise ValueError("method_config/tone_curve do not apply to the selected method")
     cfg = config or Config()
     if (limits is None) == (percentiles is None):
         raise ValueError("Supply exactly one of fixed limits or slide histogram percentiles")

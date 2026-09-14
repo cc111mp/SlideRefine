@@ -1,14 +1,23 @@
-# Method implementation status
+# Method implementation status — SlideRefine 0.2.0
 
-| ID | Current implementation | Provenance | Domain validation |
+| ID | Runnable implementation | Provenance and restrictions | Validation |
 |---|---|---|---|
-| normalization_only | Runnable plane/tile baseline | Independent project baseline | Synthetic tests |
-| tissue_snr_clahe | Runnable; imported tsclahe v0.2 plus thin WSI adapter | IA-CLAHE-inspired, not official or faithful reproduction | Synthetic tests only |
-| hifiem | Planned | Author adapter and stage-specific AF variant pending | None |
-| visual_prior_he | Planned | Equations/solver/code provenance verification pending | None |
-| multiscale_redistribution | Planned | Paper reimplementation and grayscale AF mapping pending | None |
-| simple_tone_curves | Planned | Paper curve constraints and target policy pending | None |
+| normalization_only | Shared slide-window baseline | Independent project baseline | Synthetic tests |
+| tissue_snr_clahe | Preserved tsclahe 0.2 plus WSI adapter | Independent IA-CLAHE-inspired method; global LUT state remains in RAM | Preserved tests and synthetic tile parity |
+| hifiem | **Local/global contrast stage only**, explicit `variant="contrast_af"` | Pinned author-code contrast excerpt plus separately documented AF adapter; NOT full HiFiEM, destriping, denoising, or background-model fitting | Tissue-output comparison with pinned excerpt, independent formula, halo/chunk tests |
+| simple_tone_curves | Discrete constrained curve fitting and fixed-curve tile application | Independent Python implementation of Bennett/Finlayson Sec. 3.3; explicit supplied target; NOT automatic AF target selection or the full photographic experiment | Hand-checkable optimum, independent small-QP oracle, constraints, serialization and chunk tests |
+| multiscale_redistribution | **Unavailable** | Full defining equations/author implementation not verified in this integration | None |
+| visual_prior_he | **Unavailable** | Full optimizer/prior/source verification pending | None |
 
-Selecting a planned ID raises MethodUnavailableError before output creation. A folder is not an implementation. A simple gamma/sigmoid baseline must not be labeled Simple Tone Curves paper reproduction. HiFiEM's EM conventions must not silently become AF defaults. Preserve the defining optimizer/redistribution behavior in the HE papers.
+The last two IDs raise `MethodUnavailableError` before output creation. A link or
+folder is not a completed algorithm. No generic substitute is labeled as those papers.
+`hifiem` requires an explicit supported variant; unsupported stages are not silently approximated.
 
-Read docs/PAPER_RELATIONSHIP.md for the imported backend's relationship to IA-CLAHE. See third_party/sources.json for literature pointers, not validated software licenses.
+New reference implementations and equation-to-code pointers:
+- [HiFiEM contrast](references/hifiem.md)
+- [Simple Tone Curves](references/simple_tone_curves.md)
+- [Multiscale source gap](references/multiscale_redistribution.md)
+- [Integration validation](REFERENCE_METHODS_VALIDATION.md)
+
+All image experiments in this repository are synthetic. No real-AF improvement,
+quantitative fluorescence preservation, or gigapixel throughput is established.

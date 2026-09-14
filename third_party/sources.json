@@ -1,11 +1,14 @@
 {
-  "status": "Research pointers only; no code vendored or revision pins selected.",
+  "status": "Per-source verification and implementation scope; checked 2026-09-14. See method notes and notices.",
   "sources": [
     {
       "id": "hifiem",
       "url": "https://github.com/image-infomatics/hifiem",
-      "commit": null,
-      "license_status": "Verify chosen revision before use"
+      "commit": "477efb57dc2b2d24e1ad56d1044cf99d22d39957",
+      "license_status": "Apache-2.0; selected excerpt license/notice bundled",
+      "source_file": "python/fltemd.py",
+      "source_blob": "885114c73e2c04224750340508856c5f2b07dfef",
+      "implementation": "contrast_af subset and source-pinned contrast reference only; not full HiFiEM"
     },
     {
       "id": "visual_prior_he",
@@ -15,12 +18,16 @@
     {
       "id": "multiscale_redistribution",
       "doi": "10.3390/math13203282",
-      "implementation": "pending"
+      "implementation": "unavailable",
+      "verification": "full defining equations and author code not verified in this integration"
     },
     {
       "id": "simple_tone_curves",
       "doi": "10.1007/s00371-026-04505-y",
-      "implementation": "pending"
+      "implementation": "independent discrete QP reference and fixed-curve WSI adapter",
+      "verified_sections": "3.2 and 3.3, Eqs. 12-30",
+      "author_code": "not verified or vendored",
+      "limitations": "explicit monotone target required; no automatic AF target policy or photographic benchmark reproduction"
     },
     {
       "id": "ia_clahe",

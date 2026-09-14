@@ -1,0 +1,3 @@
+simple_tone_curves complete 9
+hifiem complete 9
+Synthetic execution only; not evidence of microscopy improvement.

@@ -2,6 +2,9 @@ name: tests
 on: [push, pull_request]
 permissions:
   contents: read
+env:
+  OPENBLAS_NUM_THREADS: "1"
+  OMP_NUM_THREADS: "1"
 jobs:
   core:
     runs-on: ${{ matrix.os }}
