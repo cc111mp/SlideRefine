@@ -16,7 +16,7 @@ _METHODS = (
     MethodInfo("normalization_only", "implemented", "project baseline", "synthetic tests",
                "One fixed or slide-fitted window; not a research-paper implementation."),
     MethodInfo("tissue_snr_clahe", "implemented", "independent IA-CLAHE-inspired extension", "synthetic tests",
-               "Preserved tsclahe v0.2 backend; LUT state remains in RAM, no giant-WSI benchmark."),
+               "Preserved tsclahe v0.2; RAM reference or optional heuristic disk blocks; no giant-WSI benchmark."),
     MethodInfo("hifiem", "implemented", "pinned upstream contrast excerpt + AF adapter", "synthetic tests",
                "ONLY contrast_af variant; no full HiFiEM/stripe/denoise pipeline. Explicit config required."),
     MethodInfo("visual_prior_he", "planned", "paper implementation pending", "not evaluated",

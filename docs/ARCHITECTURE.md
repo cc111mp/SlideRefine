@@ -17,6 +17,16 @@ Pixels, analysis cells, and worker chunks are different abstractions. A worker c
 
 The current CLAHE fit uses the original in-memory global grid. Large-state disk-backed fitting is deliberately not disguised as solved. The conservative state budget rejects excessive allocations before fitting. Native Zarr/TIFF region sources and disk-backed state should be added behind these interfaces, not by changing the CLAHE math.
 
+## Enhancer training boundary
+
+`tsclahe` uses deterministic heuristic controls unless a custom predictor is
+supplied. The optional `TileController` consumes histogram/statistics cells with
+a 3x3 analysis-grid neighborhood; its paired-image trainer is independent of any
+downstream MIL training. It is not the paper's image-CNN and cannot directly load
+the paper's weights. The current trainer requires caller-supplied aligned targets;
+it does not infer AF ground truth. See [TRAINING.md](TRAINING.md) and
+[paper supervision](PAPER_RELATIONSHIP.md#training-supervision-in-the-paper).
+
 ## Reuse boundaries
 Use existing NumPy/SciPy/tifffile/Pillow infrastructure now. Evaluate Dask overlap, OME-Zarr storage, and native TIFF/Zarr region access as later adapters with a tested compatible version set. Do not import all optional libraries from the registry. No automatic downloads or unpinned copies of research repositories.
 

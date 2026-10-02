@@ -46,6 +46,16 @@ The intensity limits are illustrative. Estimate suitable slide-level or fixed-re
 
 The v0.2 transform NPZ contains LUTs, control fields and the fitted normalization, but not raw images, calibration references or masks. Retain the matching acquisition/mask metadata. A low-level fit_normalized transform has no raw-unit window unless the caller supplies one. The regular CLI already writes `metadata.json`. `examples/streaming_npy.py` is a runnable memory-map example.
 
+## Fitting slide state versus training a controller
+
+`fit_streaming` computes slide-specific statistics, controls and lookup tables.
+With the default heuristic this is deterministic fitting, not neural-network
+training, and no target image is needed. Using a learned checkpoint instead
+requires a separately trained custom controller; see [TRAINING.md](TRAINING.md).
+Neither operation trains a downstream classifier or establishes an AF ground-truth
+reference. The custom controller differs from the paper's network; see
+[PAPER_RELATIONSHIP.md](PAPER_RELATIONSHIP.md).
+
 ## Memory and compute
 
 Fitting retains tile histograms, statistics and LUTs; it does not retain a whole-slide image. Core state therefore scales approximately with `(grid_y * grid_x * histogram_bins)` rather than WSI pixel count. Small histogram tiles on a very large slide can still produce a large LUT grid. Application requires an output chunk, row-block indexing buffers and the global LUTs. It does not allocate a pixel-wise histogram-bin dimension.

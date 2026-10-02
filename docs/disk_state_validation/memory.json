@@ -1,0 +1,94 @@
+[
+  {
+    "mode": "memory",
+    "shape": [
+      1024,
+      1024
+    ],
+    "analysis_grid": [
+      64,
+      64
+    ],
+    "bins": 256,
+    "fit_seconds": 1.376036686997395,
+    "total_seconds": 1.5351086689915974,
+    "process_peak_rss_mib": 138.4921875,
+    "initial_peak_rss_mib": 76.7578125,
+    "output_sha256": "27d19e002e01bd74194c44d7d4e64ce68556b5fa73d849b1577d9361e96f6adb",
+    "pixels": 1048576,
+    "changed_pixels": 898047,
+    "max_absolute_change": 0.10063877701759338,
+    "state_cache_peak_bytes": null,
+    "state_disk_bytes": 0,
+    "scope": "Linux fresh-process synthetic procedural image; no native I/O; not gigapixel"
+  },
+  {
+    "mode": "disk",
+    "shape": [
+      1024,
+      1024
+    ],
+    "analysis_grid": [
+      64,
+      64
+    ],
+    "bins": 256,
+    "fit_seconds": 1.4701865219976753,
+    "total_seconds": 2.323406018986134,
+    "process_peak_rss_mib": 81.2421875,
+    "initial_peak_rss_mib": 76.71484375,
+    "output_sha256": "27d19e002e01bd74194c44d7d4e64ce68556b5fa73d849b1577d9361e96f6adb",
+    "pixels": 1048576,
+    "changed_pixels": 898047,
+    "max_absolute_change": 0.10063877701759338,
+    "state_cache_peak_bytes": 994560,
+    "state_disk_bytes": 13400371,
+    "scope": "Linux fresh-process synthetic procedural image; no native I/O; not gigapixel"
+  },
+  {
+    "mode": "memory",
+    "shape": [
+      2048,
+      2048
+    ],
+    "analysis_grid": [
+      128,
+      128
+    ],
+    "bins": 256,
+    "fit_seconds": 5.411457932001213,
+    "total_seconds": 6.047287669003708,
+    "process_peak_rss_mib": 275.9609375,
+    "initial_peak_rss_mib": 76.72265625,
+    "output_sha256": "eeac45239b372a83e1cb0a716d101184d54ebae5ef38ba05cb941b99b1d48521",
+    "pixels": 4194304,
+    "changed_pixels": 3594237,
+    "max_absolute_change": 0.1006380021572113,
+    "state_cache_peak_bytes": null,
+    "state_disk_bytes": 0,
+    "scope": "Linux fresh-process synthetic procedural image; no native I/O; not gigapixel"
+  },
+  {
+    "mode": "disk",
+    "shape": [
+      2048,
+      2048
+    ],
+    "analysis_grid": [
+      128,
+      128
+    ],
+    "bins": 256,
+    "fit_seconds": 5.9485302079992834,
+    "total_seconds": 9.494534397992538,
+    "process_peak_rss_mib": 81.45703125,
+    "initial_peak_rss_mib": 76.94921875,
+    "output_sha256": "eeac45239b372a83e1cb0a716d101184d54ebae5ef38ba05cb941b99b1d48521",
+    "pixels": 4194304,
+    "changed_pixels": 3594237,
+    "max_absolute_change": 0.1006380021572113,
+    "state_cache_peak_bytes": 994560,
+    "state_disk_bytes": 53593715,
+    "scope": "Linux fresh-process synthetic procedural image; no native I/O; not gigapixel"
+  }
+]

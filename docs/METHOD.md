@@ -3,6 +3,14 @@
 This document specifies the delivered `tsclahe` code, not an implementation of all equations
 in the original IA-CLAHE paper. See `PAPER_RELATIONSHIP.md` for that distinction.
 
+The default enhancement path uses deterministic heuristic controls and needs no
+training. The optional controller is our independently implemented network, trained
+on supplied aligned same-modality reference pairs. Training a downstream classifier
+does not train that controller. The paper's own reference-image supervision is
+described in [PAPER_RELATIONSHIP.md](PAPER_RELATIONSHIP.md#training-supervision-in-the-paper);
+no clip-limit labels must not be read as no reference targets. Our AF target policy
+remains unresolved; see [TRAINING.md](TRAINING.md).
+
 ## 1. Separate calibration, normalization and enhancement
 
 With a raw dark reference D and a raw uniform-field reference F:

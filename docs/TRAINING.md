@@ -3,6 +3,26 @@
 Start with the training-free baseline. A learned clip controller does not by itself fix missing
 scanner metadata, weak tissue masking, artifact ambiguity, or inconsistent reference targets.
 
+## What this training does
+
+This guide trains **our optional histogram/statistics-grid controller**, not the
+IA-CLAHE paper's network. The default heuristic enhancer needs no training.
+The paper also uses reference-image supervision; its absence of pre-searched
+clip-limit labels does not remove the need for targets. The exact source and target
+construction are documented in [PAPER_RELATIONSHIP.md](PAPER_RELATIONSHIP.md#training-supervision-in-the-paper).
+
+This trainer consumes supplied aligned pairs. It does not automatically construct
+photographic or AF degradation pairs, discover an ideal AF target, use malignancy
+labels as its objective, or train DINO/MIL. Training MIL downstream is a separate
+operation. No pretrained AF controller is supplied, and the paper's weights are
+not directly compatible with this different network/operator.
+
+An AF reference policy remains to be established. A proposed synthetic-degradation
+experiment could use an original AF image as a reconstruction target, but that only
+teaches return to the original appearance. It does not correct unknown defects in
+the reference or demonstrate preservation of diagnostic signal. Define the target
+policy and patient-disjoint evaluation before interpreting an AF-trained controller.
+
 ## Input and target contract
 
 Provide group-disjoint CSV files with columns:
@@ -123,3 +143,6 @@ checkpoint without demanding denoising or an impossible inverse gain.
 This is intentionally a software fixture, not an independent benchmark, a reproduction of the
 paper's data augmentation, or a simulation validated against a microscope. For real reference
 pairs, an oracle/constrained-reference analysis remains future evaluation work.
+
+In particular, these operator-generated targets are not expert-selected AF ground
+truth. Successful optimization of this fixture establishes software behavior only.

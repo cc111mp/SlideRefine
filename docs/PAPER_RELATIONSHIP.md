@@ -15,6 +15,27 @@ a local map and a global positive scale. It trains through differentiable CLAHE 
 L1 reference reconstruction, without searched clip-limit labels. Image features, pretrained
 initialization, and the paper's training data/augmentation differ from this repository.
 
+## Training supervision in the paper
+
+The paper trains with reference images, without pre-searched clip-limit labels.
+Section 5.1 uses MSEC (derived from MIT–Adobe FiveK), taking expert photographer C's
+retouched images as clean references. Histogram compression and intensity shift
+create degraded inputs. The CNN predicts tile-wise clip limits; differentiable
+CLAHE produces an output that is compared with the clean reference using image-wise
+L1 reconstruction loss (Sections 4–4.1).
+
+```text
+Clean reference -> synthetic histogram degradation -> CNN -> CLAHE -> output
+       |                                                              |
+       +----------------------- L1 comparison ------------------------+
+```
+
+Thus, no ground-truth clip limits does not mean no reference-image supervision.
+Zero-shot downstream evaluation means using the trained enhancer on other tasks
+without task-specific training; it does not mean that the enhancer was never trained.
+These photographic targets are not AF diagnostic ground truth.
+Source: [IA-CLAHE v1, Sections 4–5.1](https://arxiv.org/html/2604.16010v1#S4).
+
 ## What is shared, changed, and unproven
 
 | Component | Relationship |
@@ -29,12 +50,30 @@ initialization, and the paper's training data/augmentation differ from this repo
 | Final rejected-pixel envelope | Independent v0.2 repair |
 | Capped water filling | Independent operator, not a faithful reproduction |
 | Paired same-modality trainer | Independent training recipe and preprocessing contract |
+| Training supervision | Paper uses photographic reconstruction pairs; our optional trainer requires explicit aligned same-modality targets supplied by the caller |
 | Zero-shot microscopy improvement or scanner invariance | Not established |
 
 The delivered controller is neither the paper's image-CNN nor the 2,434-parameter MLP mentioned
 in an earlier source description. It is explicitly documented in METHOD.md and the code.
 No results or safety benefits are inherited by citation. No claim about present availability
 of the authors' official code is made here.
+
+## Which implementation is being evaluated
+
+- **Default `tissue_snr_clahe`:** deterministic heuristic controls, with no enhancer
+  training or reference targets required. Adaptive here means image-dependent rules.
+- **Optional `TileController`:** our histogram/statistics-grid CNN, trained through
+  our bounded operator. Its architecture and checkpoint format differ from the
+  paper; author weights are not directly interchangeable. See [TRAINING.md](TRAINING.md).
+- **Downstream MIL training:** training a classifier on enhanced-image features
+  does not train the enhancer. A heuristic-enhancement classification experiment
+  does not evaluate learned IA-CLAHE or our optional learned controller.
+
+The repository has no established AF reference-target standard. Reconstructing an
+original AF image from synthetic brightness/contrast perturbations would teach
+recovery of that appearance, including its existing defects; it would not establish
+an ideal AF appearance or improved diagnostic features. Such a target-generation
+policy would be a separate experiment, not the current synthetic software fixture.
 
 ## Appropriate project description
 

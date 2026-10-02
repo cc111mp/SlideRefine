@@ -1,0 +1,30 @@
+{
+  "schema": "sliderefine.af-study-design/v1",
+  "status": "candidate_design_not_execution_lock",
+  "stage": "normalization_only",
+  "cohort_status": "previously_inspected_exploratory",
+  "sample_policy": "existing_whole_slide_stride_max_1_dimension_div_512",
+  "post_mapping": "original_uint8_rgb_resize_and_dino_imagenet_transform",
+  "arms": [
+    {"id": "original_p995", "mapping": "zero_floor_percentile", "scope": "whole_slide", "percentile": 99.5},
+    {"id": "p990", "mapping": "zero_floor_percentile", "scope": "whole_slide", "percentile": 99.0},
+    {"id": "p999", "mapping": "zero_floor_percentile", "scope": "whole_slide", "percentile": 99.9},
+    {"id": "z_whole_k3", "mapping": "clip_half_plus_z_over_2k", "scope": "whole_slide", "k": 3},
+    {"id": "z_whole_k4", "mapping": "clip_half_plus_z_over_2k", "scope": "whole_slide", "k": 4},
+    {"id": "z_whole_k6", "mapping": "clip_half_plus_z_over_2k", "scope": "whole_slide", "k": 6},
+    {"id": "z_tissue_k3", "mapping": "clip_half_plus_z_over_2k", "scope": "fold_correct_tissue", "k": 3},
+    {"id": "z_tissue_k4", "mapping": "clip_half_plus_z_over_2k", "scope": "fold_correct_tissue", "k": 4},
+    {"id": "z_tissue_k6", "mapping": "clip_half_plus_z_over_2k", "scope": "fold_correct_tissue", "k": 6}
+  ],
+  "outer_patients": 21,
+  "seeds": [20261001, 20261002, 20261003, 20261004, 20261005],
+  "epochs": 15,
+  "encoder_scales": [1, 4],
+  "outer_fits_before_inner_selection": 945,
+  "primary": "paired_outer_slide_accuracy_difference_at_threshold_0.5",
+  "bootstrap_unit": "patient",
+  "bootstrap_resamples": 10000,
+  "bootstrap_seed": 20260914,
+  "selection_requirement": "nested_patient_splits_including_learned_preprocessing_or_report_fixed_arms_without_selected_winner_claim",
+  "classification_executed": false
+}

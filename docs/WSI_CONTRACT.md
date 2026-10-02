@@ -17,12 +17,18 @@ Source rectangles must be registered and nonoverlapping. Source tiles can omit r
 Derive composed halos and boundary conventions per method. Raw tile coordinates only establish adjacency, not biological correlation. Do not smooth neighboring means automatically.
 
 ## Shared state and equivalence
+
+Fitting per-slide CLAHE state with the heuristic is not enhancer training and needs
+no paired targets. A learned predictor must already have been trained separately
+under [the custom training contract](TRAINING.md). Learned-controller training,
+slide-state fitting, and downstream MIL training are distinct operations; preserve
+that distinction in method names and provenance.
 Hold normalization, analysis grid origin/size, masks, model, thresholds, and method state fixed while rendering. Change only execution chunk size/order. Test manageable whole-image references against chunked rendering with shifted origins. For the current NumPy backend, compare float32 outputs at atol=2e-7, rtol=0 unless a more specific test establishes exact equality.
 
 The reader returns validity independently from foreground. The final CLAHE rejection envelope must still apply after neighboring mappings are interpolated. Keep source files immutable for the whole run. The initial runner records a manifest hash but does not compute every source pixel digest; stronger immutable-source identity is a later task.
 
 ## Memory and output
-Never allocate a full slide pixel array, mask, or reliability map for actual WSI execution. The current grid state is in RAM; a conservative estimate prevents exceeding the chosen budget, but is not a peak-RSS theorem. Implement chunked state rather than silently enlarging analysis cells.
+Never allocate a full slide pixel array, mask, or reliability map for actual WSI execution. The default reference grid state is in RAM. Optional disk state fits bounded analysis-cell blocks and gathers render state through a bounded cache. Conservative state estimates are not peak-RSS theorems; source tile caches, rendering pixels, reader metadata, and NumPy temporaries are separate. Disk mode preserves the analysis-cell size and origin. See DISK_STATE_VALIDATION.md for measured limits.
 
 The current writer stores NPY output tiles and branch manifests, not a native WSI pyramid. If a run fails, leave incomplete status and do not claim valid export. Resume is pending. For a canonical future pyramid, enhance the designated full-resolution image then downsample it: nonlinear enhancement and downsampling do not generally commute.
 
@@ -46,3 +52,7 @@ Neither performs dark/flat calibration or physical saturation detection. Fitted 
 identity and normalization policy are separate recorded fields. Source tiles must remain
 immutable across all passes. These are selected-channel reference runners with incremental
 NPY outputs, not native pyramidal formats or a production scheduler.
+
+## Disk-state prototype
+
+`sliderefine.clahe-blocks/v1` binds normalization, config, raw/mask/validity content identities and reference backend hashes. Histograms, scalar diagnostics, feature channels, controls and LUTs are written per block. A final completion marker binds metadata and ordered block ledgers. It is serial immutable fitted state, not resumable output. The unchanged heuristic has zero controller-grid halo; renderer interpolation and rejection-envelope halos remain the reference operations. Learned-controller state fitting is explicitly unsupported. Native readers/writers are still pending.

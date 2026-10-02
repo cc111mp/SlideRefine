@@ -1,7 +1,7 @@
 """Serial reference runner with fixed slide state and incrementally written NPY tiles.
 
-Pixels are streamed. The retained tsclahe state/temporary buffers are in-memory;
-an explicit conservative budget estimate prevents unbounded grid allocation.
+Pixels are streamed. The default tsclahe state is in-memory; optional heuristic
+disk blocks preserve its math and renderer. Both have state working-budget guards.
 No native pyramid writer, resume implementation, learned WSI executor, or GPU
 scheduler is claimed. Use the unchanged tsclahe APIs for training/plane inference.
 """
@@ -41,7 +41,12 @@ def estimate_state_bytes(shape, cfg):
 
 def run_manifest(manifest, output, *, method="tissue_snr_clahe", config=None,
                  limits=None, percentiles=None, chunk_shape=(1024,1024),
-                 max_state_bytes=512*1024**2, method_config=None, tone_curve=None):
+                 max_state_bytes=512*1024**2, method_config=None, tone_curve=None,
+                 state_backend="memory", state_block_shape=(8,8), state_cache_bytes=16*1024**2):
+    if state_backend not in ("memory", "disk"):
+        raise ValueError("state_backend must be memory or disk")
+    if state_backend == "disk" and method != "tissue_snr_clahe":
+        raise ValueError("Disk state applies only to tissue_snr_clahe")
     require_method(method)  # Fail before creating files for planned methods.
     if method in ("hifiem", "simple_tone_curves"):
         if config is not None:
@@ -63,12 +68,18 @@ def run_manifest(manifest, output, *, method="tissue_snr_clahe", config=None,
     if max(chunk_shape[0]*chunk_shape[1], cfg.tile_size[0]*cfg.tile_size[1]) > source.max_region_pixels:
         raise ValueError("Processing/analysis chunk exceeds the region-size guard")
     estimate = estimate_state_bytes(source.shape, cfg) if method != "normalization_only" else 0
+    if state_backend == "disk":
+        from .state_store import estimate_block_bytes, fit_disk, manifest_identity
+        if type(state_cache_bytes) is not int or state_cache_bytes < 0:
+            raise ValueError("state_cache_bytes must be nonnegative")
+        estimate = estimate_block_bytes(cfg, state_block_shape) + state_cache_bytes
     if estimate > max_state_bytes:
         raise MemoryError(f"Estimated state/working allocation {estimate} bytes exceeds budget {max_state_bytes}. "
-                          "Do not silently change analysis scale; disk-backed state is a future milestone.")
+                          "Reduce execution-state blocks/cache or select disk state; preserve the analysis scale.")
     out = Path(output).resolve()
     if out.exists():
         raise FileExistsError(f"Output must not exist: {out}")
+    source_identity = manifest_identity(source) if state_backend == "disk" else None
     if limits is not None:
         if len(limits) != 2:
             raise ValueError("limits must contain low and high")
@@ -82,14 +93,24 @@ def run_manifest(manifest, output, *, method="tissue_snr_clahe", config=None,
             raise ValueError("sensor_max requires raw input; corrected pixels cannot recover saturation")
         saturation_reader = lambda *b: reader.image(*b) >= cfg.sensor_max
     transform = None
-    if method == "tissue_snr_clahe":
-        transform = fit_streaming(source.shape,reader.image,reader.mask,norm,cfg,
-                                  saturation_reader=saturation_reader)
-    out.mkdir(parents=True)
+    if state_backend == "disk":
+        out.mkdir(parents=True)
+        (out/"run.json").write_text(json.dumps({"status":"incomplete", "phase":"fitting_disk_state"}))
+        transform = fit_disk(source.shape,reader.image,reader.mask,norm,cfg,out/"state",
+                             identity=source_identity,block_shape=state_block_shape,
+                             cache_bytes=state_cache_bytes,max_state_bytes=max_state_bytes,
+                             saturation_reader=saturation_reader)
+        if manifest_identity(source) != source_identity:
+            raise ValueError("Input content changed during state fitting")
+    else:
+        if method == "tissue_snr_clahe":
+            transform = fit_streaming(source.shape,reader.image,reader.mask,norm,cfg,
+                                      saturation_reader=saturation_reader)
+        out.mkdir(parents=True)
     for folder in ("baseline","enhanced","masks","valid"):
         (out/folder).mkdir()
     metadata = {"status":"incomplete","version":__version__,"backend":"tsclahe-0.2.0",
-                "method":method,"manifest_sha256":source.digest,"normalization":norm.to_dict(),
+                "method":method,"state_backend":state_backend,"source_identity":source_identity,"manifest_sha256":source.digest,"normalization":norm.to_dict(),
                 "config":cfg.to_dict(),"chunk_shape":list(chunk_shape),"state_budget_estimate":estimate,
                 "channel_id":source.manifest["channel_id"],"intensity_domain_in":source.manifest["intensity_domain"],
                 "python":sys.version.split()[0],"platform":platform.platform(),"numpy":np.__version__,
@@ -99,7 +120,7 @@ def run_manifest(manifest, output, *, method="tissue_snr_clahe", config=None,
                             "Input files must remain immutable throughout fitting and rendering."]}
     report = out/"run.json"
     report.write_text(json.dumps(metadata,indent=2),encoding="utf-8")
-    if transform is not None:
+    if transform is not None and state_backend == "memory":
         transform.save(out/"transform.npz")
     result_manifests = {}
     for branch in ("baseline","enhanced"):
@@ -125,6 +146,12 @@ def run_manifest(manifest, output, *, method="tissue_snr_clahe", config=None,
                 result_manifests[branch]["tiles"].append(dict(asdict(region),path=name,
                                                             mask_path="../masks/"+name,valid_path="../valid/"+name))
             count += 1
+        if state_backend == "disk":
+            if manifest_identity(source) != source_identity:
+                raise ValueError("Input content changed during rendering")
+            metadata.update(state_block_shape=list(state_block_shape),
+                            state_cache_bytes=state_cache_bytes,
+                            peak_state_cache_bytes=transform.peak_cache_bytes)
         for branch,m in result_manifests.items():
             (out/branch/"manifest.json").write_text(json.dumps(m,indent=2),encoding="utf-8")
         metadata.update(status="complete",output_chunks=count)

@@ -7,6 +7,21 @@ Method verified from Sections 3.2 and 3.3, including the PDF constraint matrices
 This is **independent Python code**, not an author implementation or a reproduction
 of the photographic preference experiments. No paper PDF/figures are redistributed.
 
+## Targets in the paper: curve fitting, not network training
+
+The paper approximates a supplied tone curve by a constrained simpler curve; it
+does not train a neural network to predict an ideal enhancement. In the FiveK
+experiment, input photographs are paired with expert-edited versions. Matching
+their brightness quantiles produces a global target curve. The paper treats the
+globally reconstructed expert rendition as its reference, since the original edits
+are not always exactly global. Gardline supplies analyst-adjusted underwater curves.
+These targets represent expert image adjustments, not diagnostic ground truth.
+Source: [paper, Sections 2.1–3.3](https://link.springer.com/article/10.1007/s00371-026-04505-y).
+
+The target passed to our solver is a vector of desired output brightnesses at fixed
+input brightnesses. It is not a target image, a cancer label, or a pretrained model.
+Numerical fitting requires a target policy even though it requires no network training.
+
 ## Implemented problem
 
 Given explicitly supplied, uniformly sampled monotone target values t, fit y by
@@ -57,6 +72,34 @@ log-brightness encoding, expert-image target extraction, automatic target predic
 and reproduction of the paper's datasets/metrics are not included. An AF target policy
 is a separate experiment. Never derive a deployment target from held-out reference
 images and report it as reference-free inference.
+
+## Separate AF reference policy used in Athena
+
+Athena's `sliderefine_study/reference_tone.py` supplies an independent AF target
+policy around this solver. It is not part of the paper's photographic experiment
+or automatic target selection inside the SlideRefine solver.
+
+1. Summarize each eligible slide using tissue brightness quantiles P10/P25/P50/P75/P90.
+2. Take within-patient median profiles, then a median across patients, with one
+   fixed robust trimming pass. This prevents patients with more slides dominating
+   the reference.
+3. Construct a desired mapping from the current slide's quantiles to the reference
+   quantiles, then fit the constrained Simple Tone Curve.
+4. Blend with identity using the fixed distance gate and continuous slope and
+   displacement bounds. Requested strength is a ceiling; effective strength can be zero.
+
+In the matched classification study, reference construction uses only eligible
+slides from training patients in each outer fold. Malignancy outcomes do not enter
+the quantile aggregation or curve objective. The reference is shared within the
+fold, but each slide has its own fitted curve based on its image statistics. A test
+slide supplies its own source profile; it does not contribute to the cohort reference.
+This is fitted preprocessing, followed by separate MIL training on recomputed features.
+
+No paired ideal AF image or H&E target is used. This defines a statistical reference,
+not an established AF ground-truth standard. Matching it may also change biological
+intensity differences; reconstruction/distribution agreement alone cannot establish
+diagnostic benefit. The underlying target policy must be evaluated separately from
+the correctness of the curve solver.
 
 ## Execution and reproducibility
 

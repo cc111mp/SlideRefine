@@ -32,6 +32,9 @@ def main(argv=None):
     window.add_argument("--percentiles",nargs=2,type=float,metavar=("LOW","HIGH"))
     run.add_argument("--chunk-shape",nargs=2,type=int,default=[1024,1024],metavar=("HEIGHT","WIDTH"))
     run.add_argument("--max-state-mib",type=int,default=512)
+    run.add_argument("--state-backend", choices=["memory", "disk"], default="memory")
+    run.add_argument("--state-block-shape", nargs=2, type=int, default=[8,8], metavar=("GRID_ROWS","GRID_COLS"))
+    run.add_argument("--state-cache-mib", type=int, default=16)
     args = parser.parse_args(argv)
     try:
         if args.command == "methods":
@@ -61,7 +64,8 @@ def main(argv=None):
                                   limits=args.limits,percentiles=args.percentiles,
                                   chunk_shape=tuple(args.chunk_shape),max_state_bytes=args.max_state_mib*1024**2,
                                   method_config=json.loads(args.method_config.read_text(encoding="utf-8")) if args.method_config else None,
-                                  tone_curve=args.tone_curve)
+                                  tone_curve=args.tone_curve,state_backend=args.state_backend,
+                                  state_block_shape=tuple(args.state_block_shape),state_cache_bytes=args.state_cache_mib*1024**2)
         print(json.dumps(result,indent=2,allow_nan=False))
         return 0
     except (ValueError,OSError,NotImplementedError,MemoryError,KeyError,TypeError,RuntimeError) as exc:

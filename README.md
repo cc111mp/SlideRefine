@@ -20,8 +20,32 @@ SlideRefine is a research workspace for coordinate-aware, out-of-core microscopy
 | Simple Tone Curves | Independent discrete QP fitter + fixed-curve streaming; supplied target required |
 | Visual-prior HE and multiscale redistribution | Unavailable; see method status and reference gaps |
 | Native SVS/NDPI/OME-Zarr reader/writer, output pyramid | Not yet integrated |
-| Disk-backed CLAHE state, distributed scheduling, resume | Planned; current state is RAM-backed with an explicit budget guard |
+| Disk-backed CLAHE state | Optional heuristic block store; reference equations retained; synthetic parity/RSS measured |
+| Distributed scheduling and resume | Not implemented |
 | Actual gigapixel throughput and real AF/downstream validation | Not yet measured |
+
+## CLAHE provenance and training
+
+`tissue_snr_clahe` is a custom microscopy CLAHE variant inspired by IA-CLAHE's
+adaptive-control approach. Its default controls are deterministic tissue/SNR-aware
+rules and require no enhancer training. The optional learned controller is our own
+histogram/statistics-grid CNN and requires explicit paired reference targets.
+
+The paper's no-ground-truth-clip-limits claim concerns parameter labels, not the
+absence of reference images or training. See [paper supervision and provenance](docs/PAPER_RELATIONSHIP.md#training-supervision-in-the-paper)
+and [our training contract](docs/TRAINING.md). There is no established AF target
+standard or bundled pretrained AF controller. Training a downstream MIL classifier
+on heuristic-enhanced images does not evaluate the paper's learned method.
+
+## Tone-curve targets and fitting
+
+`simple_tone_curves` fits a supplied brightness mapping with a constrained numerical
+optimizer; it does not train a neural network or infer an ideal AF target. The paper's
+expert-derived targets and Athena's separate patient-reference policy are described
+in [the tone-curve reference](docs/references/simple_tone_curves.md). In the AF policy,
+the cohort reference and each slide's curve are distinct fitted objects. Statistical
+brightness matching is not diagnostic ground truth, and subsequent MIL training is
+separate from curve fitting.
 
 ## Install
 
@@ -159,12 +183,32 @@ python examples/demo.py --out backend_demo
 
 ## WSI boundary
 
-Pixel working memory is bounded by requested regions and the tile cache. Each source tile is decoded as a whole under a size guard; large native pyramids need a future region adapter. The CLAHE fit still retains global histograms/LUTs and working temporaries in RAM. The runner estimates that allocation and rejects runs above `--max-state-mib` (default 512). The estimate is a planning guard, not a measured peak-memory guarantee. Do not enlarge the biological analysis scale merely to bypass the budget.
+Pixel working memory is bounded by requested regions and the tile cache. Each source tile is decoded as a whole under a size guard; large native pyramids need a future region adapter. The default CLAHE fit retains global histograms/LUTs and working temporaries in RAM. The optional `--state-backend disk` fits blocks of analysis cells and renders through a bounded state cache. `--state-block-shape` is measured in analysis cells; it does not change `Config.tile_size` in image pixels. `--max-state-mib` checks a conservative state working estimate, not whole-process RSS or the separate pixel cache. Do not enlarge the biological analysis scale merely to bypass the budget. See [disk-state validation](docs/DISK_STATE_VALIDATION.md) for measured synthetic memory, timing, and limitations.
 
 The tile reader has tests on a sparse 100000x100000 coordinate canvas; that is **not** processing 10 billion real pixels. Full gigapixel performance, multichannel joint transforms, learned WSI execution, native pyramids, and production restart behavior remain milestones.
 
+## Optional disk-backed CLAHE state
+
+```bash
+sliderefine run demo_input/manifest.json demo_disk \
+  --config configs/af_conservative.json --limits 0 16000 \
+  --state-backend disk --state-block-shape 8 8 --state-cache-mib 16 \
+  --chunk-shape 128 160
+```
+
+Disk mode stores versioned `state/state.json`, independently hashed NPZ blocks
+(histograms, diagnostics, features, controls, LUTs), block ledgers and a final
+`COMPLETE.json`. It preserves the reference heuristic math and renderer. Loading
+rejects incomplete/mismatched state; rendering verifies blocks on cache misses.
+A supplied learned predictor is explicitly unsupported by this disk prototype.
+Source pixels, masks and validity files are content-hashed and must stay immutable.
+Memory mode and its `transform.npz` format remain available as the reference.
+No automatic resume, native WSI adapter or output pyramid is added.
+
 ## Documentation
 
+- [Disk-state validation](docs/DISK_STATE_VALIDATION.md)
+- [AF parameter study design](docs/studies/AF_PARAMETER_STUDY.md) — classification not yet executed
 - [New reference-method validation](docs/REFERENCE_METHODS_VALIDATION.md)
 - [HiFiEM reference](docs/references/hifiem.md) and [Simple Tone Curves reference](docs/references/simple_tone_curves.md)
 - [Multiscale source gap](docs/references/multiscale_redistribution.md)

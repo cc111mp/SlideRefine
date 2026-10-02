@@ -1,5 +1,17 @@
 # Changelog
 
+## Unreleased — documentation clarification
+
+- Document the source of IA-CLAHE reference-image supervision and distinguish it
+  from clip-limit labels; link the paper's training sections.
+- Separate our default heuristic, optional custom controller, slide-state fitting,
+  and downstream MIL training across the method, training, WSI and study guides.
+- State that AF reference-target selection remains unresolved and that synthetic
+  optimization fixtures do not establish diagnostic ground truth.
+- Explain numerical tone-curve fitting, the paper's target provenance, and the
+  separate AF statistical reference policy, including shared fold references versus
+  per-slide curves and independent downstream MIL training.
+
 ## 0.2.0 — reference contrast methods (2026-09-14)
 
 - Add source-pinned, Apache-2.0 HiFiEM **contrast-only** excerpt and explicit AF adapter.

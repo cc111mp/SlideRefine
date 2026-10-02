@@ -9,7 +9,16 @@ Work on one milestone per branch/PR. Read AGENTS.md first. Preserve the original
 - Native integer histogram reduction, fixed normalization, reference rendering and NPY-tile output.
 - Synthetic neighborhood, chunk-equivalence, mask, dtype, state-budget and CLI tests.
 
-## Next PR: disk-backed state and native region adapters
+## Disk-state milestone implemented locally
+
+An optional heuristic block store now reuses the original per-cell math and
+renderer, with versioned provenance, bounded cache, chunk/origin/order tests and
+synthetic RSS measurements. See DISK_STATE_VALIDATION.md. No learned controller,
+native format adapter, scheduler or resume is included. The retained RAM runner
+is still the default. AF parameter study design is in studies/AF_PARAMETER_STUDY.md;
+that design is not a completed efficacy experiment.
+
+## Remaining milestone: native region adapters and state extensions
 1. Profile the retained global LUT/state allocation on representative inputs without changing the algorithm.
 2. Define a versioned state store for histogram/features/controls/LUTs; include source/config/normalization/mask/model digests.
 3. Fit and render chunks of the analysis grid using appropriate pixel and controller-grid halos. Prove equality with the retained in-memory reference at multiple chunk origins/sizes.
@@ -32,6 +41,19 @@ Use immutable fitted state and bounded worker/cache budgets. Write a run fingerp
 - Visual-prior HE: retrieve full equations/code, document optimizer and convergence, identify global versus spatial sufficient statistics.
 - Multiscale redistribution: preserve scale-specific redistribution/fusion; define global lattices at all scales and native-versus-downsampled semantics.
 - HiFiEM: preserve the pinned contrast reference and its notices. Add additional upstream stages only after their separate dependencies and full/chunk behavior are verified; the current halo must not be reused for destriping.
+
+## Separate research task: learned CLAHE
+
+Keep heuristic-enhancer evaluation separate from learned-controller training.
+Before an AF controller experiment, specify aligned same-modality reference targets,
+their provenance, and patient-disjoint training/selection roles. No established AF
+reference standard is supplied. The existing synthetic training fixture only checks
+software optimization; it does not define diagnostic ground truth. See
+[TRAINING.md](TRAINING.md) and [paper supervision](PAPER_RELATIONSHIP.md#training-supervision-in-the-paper).
+
+A faithful IA-CLAHE baseline requires its own network, operator and training recipe;
+our optional controller is a different implementation. Retraining MIL on heuristic
+outputs does not complete either learned-enhancer task.
 
 ## Final empirical milestone
 Actual gigapixel dataset on target hardware, with native I/O, restart checks and full/chunk tests on reference ROIs. Evaluate weak tissue, oriented structures, stripes/grids, low-SNR, saturation, and mask failures. Compare normalization-only and independent methods before combinations. Distinguish frozen-model preprocessing swaps from matched retraining; split by slide/patient/session.
