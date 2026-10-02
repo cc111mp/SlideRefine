@@ -1,5 +1,15 @@
 # Changelog
 
+## Unreleased — validated histogram normalization
+
+- Promote explicit-reference Nyul-style landmark and empirical-CDF mappings into
+  a reusable fit/save/load/apply API, with streamed valid-tissue histogram fitting
+  and a `fit-histogram-lut` command.
+- Reject non-finite or malformed inputs before interpolation and quantization;
+  preserve valid-input AF formulas, tie policy and uint8 flooring.
+- Add synthetic numerical, invalid-input, serialization and chunk-invariance tests.
+  No backend equations, patient data, pretrained weights or research results change.
+
 ## Unreleased — documentation clarification
 
 - Document the source of IA-CLAHE reference-image supervision and distinguish it

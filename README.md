@@ -1,5 +1,10 @@
 # SlideRefine
 
+Reusable [Nyul-style and empirical-CDF normalization](docs/HISTOGRAM_NORMALIZATION.md)
+is available through `sliderefine.normalization` and `fit-histogram-lut`. Fit once
+to an explicit frozen reference, save validated state, and apply it unchanged to
+raw uint16 chunks. Reference population selection remains a study responsibility.
+
 **Tile-aware correction and enhancement for gigapixel microscopy.**
 
 SlideRefine is a research workspace for coordinate-aware, out-of-core microscopy processing. It combines a preserved Tissue/SNR-aware CLAHE v0.2 backend with a working tile-manifest reader, shared slide statistics, region rendering, a command-line interface, and tests.

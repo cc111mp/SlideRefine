@@ -20,6 +20,11 @@ def main(argv=None):
     tone.add_argument("target",type=Path,help='JSON containing {"samples": [...]} on a uniform [0,1] input grid')
     tone.add_argument("output",type=Path)
     tone.add_argument("--interpolation",choices=["pchip","linear"],default="pchip")
+    histogram = sub.add_parser("fit-histogram-lut", help="Fit a uint16 slide LUT to an explicit frozen reference")
+    histogram.add_argument("manifest", type=Path)
+    histogram.add_argument("reference", type=Path, help="Nyul landmarks or CDF target JSON; see docs/HISTOGRAM_NORMALIZATION.md")
+    histogram.add_argument("output", type=Path)
+    histogram.add_argument("--chunk-shape", nargs=2, type=int, default=[1024, 1024])
     run = sub.add_parser("run",help="Fit one slide state and stream output NPY tiles")
     run.add_argument("manifest",type=Path)
     run.add_argument("output",type=Path)
@@ -53,6 +58,34 @@ def main(argv=None):
             curve = fit_simple_tone_curve(target["samples"],interpolation=args.interpolation)
             curve.save(args.output)
             result = curve.to_dict()
+        elif args.command == "fit-histogram-lut":
+            from .normalization import HistogramLUT, fit_uint16_histogram, fit_nyul, fit_cdf
+            if args.output.exists():
+                raise FileExistsError(args.output)
+            if args.reference.stat().st_size > 2_000_000:
+                raise ValueError("Histogram reference file exceeds the size limit")
+            reference = json.loads(args.reference.read_text(encoding="utf-8"))
+            if not isinstance(reference, dict):
+                raise ValueError("Reference must be a JSON object")
+            method = reference.get("method")
+            required = ({"method", "percentiles", "target_landmarks"} if method == "nyul_landmarks_af"
+                        else {"method", "target_histogram", "domain"})
+            if method not in ("nyul_landmarks_af", "empirical_cdf_af") or set(reference) != required:
+                raise ValueError("Unsupported or incomplete histogram reference")
+            if method == "empirical_cdf_af" and reference["domain"] != [0, 1]:
+                raise ValueError("CDF target bins must span normalized [0,1]")
+            source = TileManifestSource(args.manifest)
+            if source.manifest["intensity_domain"] == "normalized":
+                raise ValueError("Refusing to normalize an already normalized slide")
+            counts = fit_uint16_histogram(source, chunk_shape=tuple(args.chunk_shape))
+            state = (fit_nyul(counts, reference["target_landmarks"], percentiles=reference["percentiles"])
+                     if method == "nyul_landmarks_af" else fit_cdf(counts, reference["target_histogram"]))
+            parameters = json.loads(state.parameters_json)
+            parameters.update(manifest_sha256=source.digest, intensity_domain=source.manifest["intensity_domain"],
+                              fit_scope="valid_tissue", application_scope="all_valid_pixels")
+            state = HistogramLUT(state.method, state.lookup, json.dumps(parameters, allow_nan=False))
+            state.save(args.output)
+            result = state.to_dict()
         elif args.command == "inspect":
             s = TileManifestSource(args.manifest)
             result = {"slide_id":s.manifest["slide_id"],"shape":s.shape,"dtype":str(s.dtype),

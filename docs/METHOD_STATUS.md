@@ -1,5 +1,12 @@
 # Method implementation status — SlideRefine 0.2.0
 
+The [histogram normalization API](HISTOGRAM_NORMALIZATION.md) additionally provides
+`nyul_landmarks_af` and `empirical_cdf_af`: explicit-reference fitting, immutable
+uint16-to-uint8 lookup state and chunk application. These numerical AF adaptations
+are available through the Python API and `fit-histogram-lut`; they are not entries
+in the existing `run --method` image-enhancement runner. Reference construction and
+real-AF efficacy remain separate study responsibilities.
+
 | ID | Runnable implementation | Provenance and restrictions | Validation |
 |---|---|---|---|
 | normalization_only | Shared slide-window baseline | Independent project baseline | Synthetic tests |
