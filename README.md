@@ -9,7 +9,11 @@ raw uint16 chunks. Reference population selection remains a study responsibility
 
 SlideRefine is a research workspace for coordinate-aware, out-of-core microscopy processing. It combines a preserved Tissue/SNR-aware CLAHE v0.2 backend with a working tile-manifest reader, shared slide statistics, region rendering, a command-line interface, and tests.
 
-**Release 0.2.0.** HiFiEM local/global contrast and a Simple Tone Curves discrete optimizer now have reference code and tile adapters. This is not a completed five-paper implementation or a giant-WSI benchmark. HiFiEM destriping/full restoration is NOT included. Visual-prior HE and multiscale redistribution remain unavailable; selecting them fails explicitly.
+**Development version 0.2.1.dev0.** Includes the disk-backed CLAHE state milestone
+and the already reviewed frozen histogram normalization operators. The original
+`tsclahe` 0.2.0 backend remains byte-identical. HiFiEM local/global contrast and
+Simple Tone Curves retain their reference implementations; HiFiEM full restoration,
+visual-prior HE and multiscale redistribution remain unavailable.
 
 ## What runs now
 
